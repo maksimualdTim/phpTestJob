@@ -64,8 +64,8 @@ class OrderController extends Controller
 
         $good = json_decode($response);
 
-        $storeOrderResult = $client->request('POST', 'orders/create ', [
-            'body' => [
+        $storeOrderResult = $client->request('POST', 'orders/create', [
+            'json' => [
                 'apiKey' => env('API_KEY'),
                 'order[status]' => 'trouble',
                 'order[lastName]' => $lastName,
@@ -79,6 +79,7 @@ class OrderController extends Controller
                 'order[items][][offer][id]' => $good->products[0]->offers[0]->id,
             ]
         ])->getBody()->getContents();
+
         return response($storeOrderResult);
     }
 
