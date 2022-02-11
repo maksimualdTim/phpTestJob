@@ -63,20 +63,25 @@ class OrderController extends Controller
         ])->getBody()->getContents();
 
         $good = json_decode($response);
+        $order = json_encode([
+                'status' => 'trouble',
+                'lastName' => $lastName,
+                'firstName' => $firstName,
+                'patronymic' => $patronymic,
+                'customerComment' => $comment,
+                'orderType' => 'fizik', 
+                'orderMethod' => 'test',
+                'number' => '25092001',
+                'customer' => ['site' => 'test'],
+                'items' => [[
+                    'offer' => ['id' => $good->products[0]->offers[0]->id]
+                    ]],                    
+        ]);
 
         $storeOrderResult = $client->request('POST', 'orders/create', [
             'json' => [
                 'apiKey' => env('API_KEY'),
-                'order[status]' => 'trouble',
-                'order[lastName]' => $lastName,
-                'order[firstName]' => $firstName,
-                'order[patronymic]' => $patronymic,
-                'order[customerComment]' => $comment,
-                'order[orderType]' => 'fizik', 
-                'order[orderMethod]' => 'test',
-                'order[number]' => '25092001',
-                'order[customer][site]' => 'test',
-                'order[items][][offer][id]' => $good->products[0]->offers[0]->id,
+                'order' => $order,
             ]
         ])->getBody()->getContents();
 
